@@ -35,7 +35,8 @@ module Temporal
         # models
         acf,
         # data
-        tsread, tswrite, quandl, quandl_auth, quandl_meta, quandl_search, yahoo, google
+        tsread, tswrite, quandl, quandl_auth, quandl_meta, quandl_search, yahoo, google, 
+        binance,arrow_read,arrow_write
     include("data/ts.jl")
     include("data/indexing.jl")
     include("data/stringrange.jl")
@@ -53,6 +54,8 @@ module Temporal
     include("feed/google.jl")
     include("feed/quandl.jl")
     include("feed/text.jl")
+    include("feed/arrow.jl")
+    include("feed/binance.jl")
     include("calc/operations.jl")
     include("calc/shift.jl")
     include("calc/models.jl")

@@ -161,7 +161,7 @@ function binance(symb::String;
       dtnms2 = [:open_time_local,:close_time_local]
       @chain df begin
         transform!(header.=>str2float.=>header)
-        transform!(dtnms1.=>(t->utc_ts2local_dt.(t)).=>dtnms2)      
+        transform!(dtnms1.=>(t->utc_ts2local_dt.(t,timezone)).=>dtnms2)      
         sort!(:open_time,rev=true)
       end    
     end
@@ -169,7 +169,8 @@ function binance(symb::String;
     
     df_sub = select(df,header,copycols=false)    
 
-    # TS(Vector{String},Matrix{Float64},Vector{DateTime})
+    # TS(values, index, fields)
+    # TS(Matrix{Float64},Vector{DateTime},Vector{String})
     return TS(Matrix{Float64}(df_sub),
               Matrix(select(df,[:open_time_local]))[:,1], 
               header)

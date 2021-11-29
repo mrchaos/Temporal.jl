@@ -161,7 +161,7 @@ function binance(symb::String;
       dtnms2 = [:open_time_local,:close_time_local]
       @chain df begin
         transform!(header.=>str2float.=>header)
-        transform!(dtnms1.=>(t->utc_ts2local_dt.(t,timezone)).=>dtnms2)      
+        transform!(dtnms1.=>(t->utc_ts2local_dt.(t;timezone=timezone)).=>dtnms2)      
         sort!(:open_time,rev=true)
       end    
     end

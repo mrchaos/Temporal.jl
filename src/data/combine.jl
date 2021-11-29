@@ -4,14 +4,14 @@ Utilities for combining and manipulating TS objects with their indexes
 
 import Base: hcat, vcat, merge
 
-# function partner(x::TS, y::TS)
+# function partner(x::ts, y::ts)
 #     yy = !overlaps(x.index, y.index) .* NaN
 #     yy[!isnan(yy),:] = y.values
 #     return ts(yy, x.index, y.fields)
 # end
 
 """
-    ojoin(x::TS,y::TS)::TS
+    ojoin(x::ts,y::ts)::ts
 
 Outer join two TS objects by index.
 
@@ -19,11 +19,11 @@ Equivalent to `x` OUTER JOIN `y` ON `x.index` = `y.index`.
 
 ...
 # Arguments
-- `x::TS`: Left side of the join.
-- `y::TS`: Right side of the join.
+- `x::ts`: Left side of the join.
+- `y::ts`: Right side of the join.
 ...
 """
-function ojoin(x::TS, y::TS)::TS
+function ojoin(x::ts, y::ts)::ts
     if isempty(x) && !isempty(y)
         return y
     elseif isempty(y) && !isempty(x)
@@ -42,7 +42,7 @@ function ojoin(x::TS, y::TS)::TS
 end
 
 """
-    ijoin(x::TS,y::TS)::TS
+    ijoin(x::ts,y::ts)::ts
 
 Inner join two TS objects by index.
 
@@ -50,11 +50,11 @@ Equivalent to `x` INNER JOIN `y` on `x.index` = `y.index`.
 
 ...
 # Arguments
-- `x::TS`: Left side of the join.
-- `y::TS`: Right side of the join.
+- `x::ts`: Left side of the join.
+- `y::ts`: Right side of the join.
 ...
 """
-function ijoin(x::TS, y::TS)::TS
+function ijoin(x::ts, y::ts)::ts
     if isempty(x) && !isempty(y)
         return y
     elseif isempty(y) && !isempty(x)
@@ -67,7 +67,7 @@ function ijoin(x::TS, y::TS)::TS
 end
 
 """
-    ljoin(x::TS, y::TS)::TS
+    ljoin(x::ts, y::ts)::ts
 
 Left join two TS objects by index.
 
@@ -75,16 +75,16 @@ Equivalent to `x` LEFT JOIN `y` ON `x.index` = `y.index`.
 
 ...
 # Arguments
-- `x::TS`: Left side of the join.
-- `y::TS`: Right side of the join.
+- `x::ts`: Left side of the join.
+- `y::ts`: Right side of the join.
 ...
 """
-function ljoin(x::TS, y::TS)::TS
+function ljoin(x::ts, y::ts)::ts
     return [x y[intersect(x.index, y.index)]]
 end
 
 """
-    rjoin(x::TS, y::TS)::TS
+    rjoin(x::ts, y::ts)::ts
 
 Right join two TS objects by index.
 
@@ -92,28 +92,28 @@ Equivalent to `x` RIGHT JOIN `y` ON `x.index` = `y.index`.
 
 ...
 # Arguments
-- `x::TS`: Left side of the join.
-- `y::TS`: Right side of the join.
+- `x::ts`: Left side of the join.
+- `y::ts`: Right side of the join.
 ...
 """
-function rjoin(x::TS, y::TS)::TS
+function rjoin(x::ts, y::ts)::ts
     return [x[intersect(x.index, y.index)] y]
 end
 
-hcat(x::TS, y::TS)::TS = ojoin(x, y)
-hcat(x::TS)::TS = x
-function hcat(series::TS...)
+hcat(x::ts, y::ts)::ts = ojoin(x, y)
+hcat(x::ts)::ts = x
+function hcat(series::ts...)
     out = series[1]
     @inbounds for j = 2:length(series)
         out = [out series[j]]
     end
     return out
 end
-function vcat(x::TS, y::TS)
+function vcat(x::ts, y::ts)
     @assert size(x,2) == size(y,2) "Dimension mismatch: Number of columns must be equal."
     return TS([x.values;y.values], [x.index;y.index], x.fields)
 end
-function vcat(series::TS...)
+function vcat(series::ts...)
     out = series[1]
     @inbounds for j = 2:length(series)
         out = vcat(out, series[j])
@@ -122,19 +122,19 @@ function vcat(series::TS...)
 end
 
 """
-    merge(x::TS,y::TS;join::Char='o')::TS
+    merge(x::ts,y::ts;join::Char='o')::ts
 
 Merge two time series objects together by index with an optionally specified join type parameter.
 
 ...
 # Arguments
-- `x::TS`: Left side of the join.
-- `y::TS`: Right side of the join.
+- `x::ts`: Left side of the join.
+- `y::ts`: Right side of the join.
 Optional args:
-- `join::Char='o'::TS`: Specifies the logic used to perform the merge, and may take on the values 'o' (outer join), 'i' (inner join), 'l' (left join), or 'r' (right join). Defaults to outer join, whose result is the same as `hcat(x, y)` or `[x y]`.
+- `join::Char='o'::ts`: Specifies the logic used to perform the merge, and may take on the values 'o' (outer join), 'i' (inner join), 'l' (left join), or 'r' (right join). Defaults to outer join, whose result is the same as `hcat(x, y)` or `[x y]`.
 ...
 """
-function merge(x::TS, y::TS; join::Char='o')::TS
+function merge(x::ts, y::ts; join::Char='o')::ts
     @assert join == 'o' || join == 'i' || join == 'l' || join == 'r' "`join` must be 'o', 'i', 'l', or 'r'."
     if join == 'o'
         return ojoin(x, y)
@@ -150,10 +150,10 @@ end
 #===============================================================================
                 COMBINING/MERGING WITH OTHER TYPES
 ===============================================================================#
-hcat(x::TS, y::AbstractArray)::TS = ojoin(x, ts(y, x.index))
-hcat(y::AbstractArray, x::TS)::TS = ojoin(ts(y, x.index), x)
-hcat(x::TS, y::Number)::TS = ojoin(x, ts(fill(y,size(x,1)), x.index))
-hcat(y::Number, x::TS)::TS = ojoin(ts(fill(y,size(x,1)), x.index), x)
+hcat(x::ts, y::AbstractArray)::ts = ojoin(x, ts(y, x.index))
+hcat(y::AbstractArray, x::ts)::ts = ojoin(ts(y, x.index), x)
+hcat(x::ts, y::Number)::ts = ojoin(x, ts(fill(y,size(x,1)), x.index))
+hcat(y::Number, x::ts)::ts = ojoin(ts(fill(y,size(x,1)), x.index), x)
 
 function getmaxtype(arrs)::Type
     result::Type = Any
@@ -163,7 +163,7 @@ function getmaxtype(arrs)::Type
     return result
 end
 
-function hcat(series::TS, arrs::AbstractArray...)::TS
+function hcat(series::ts, arrs::AbstractArray...)::ts
     n = size(series,1)
     cols = map(arr->size(arr,2), arrs)
     rows = map(arr->size(arr,1), arrs)
@@ -178,7 +178,7 @@ function hcat(series::TS, arrs::AbstractArray...)::TS
     return [series out]
 end
 
-function hcat(series::TS, nums::Number...)::TS
+function hcat(series::ts, nums::Number...)::ts
     n = size(series,1)
     k = length(nums)
     T::Type = getmaxtype(nums)

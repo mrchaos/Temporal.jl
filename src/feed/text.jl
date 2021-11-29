@@ -1,5 +1,5 @@
 """
-    tsread(file::String;dlm::Char=',',header::Bool=true,eol::Char='\\n',indextype::Type=Date,format::String="yyyy-mm-dd")::TS
+    tsread(file::String;dlm::Char=',',header::Bool=true,eol::Char='\\n',indextype::Type=Date,format::String="yyyy-mm-dd")::ts
 
 Read contents from a text file into a TS object.
 
@@ -17,7 +17,7 @@ Optional args:
     X = tsread("data.csv")
 
 """
-function tsread(file::String; dlm::Char=',', header::Bool=true, eol::Char='\n', indextype::Type=Date, format::String="yyyy-mm-dd")::TS
+function tsread(file::String; dlm::Char=',', header::Bool=true, eol::Char='\n', indextype::Type=Date, format::String="yyyy-mm-dd")::ts
     @assert indextype == Date || indextype == DateTime "Argument `indextype` must be either `Date` or `DateTime`."
     csv = Vector{String}(split(read(file, String), eol))
     if csv[end] == ""
@@ -48,12 +48,12 @@ function tsread(file::String; dlm::Char=',', header::Bool=true, eol::Char='\n', 
 end
 
 """
-    tswrite(x::TS,file::String;dlm::Char=',',header::Bool=true,eol::Char='\\n')::Nothing
+    tswrite(x::ts,file::String;dlm::Char=',',header::Bool=true,eol::Char='\\n')::Nothing
 
 Write time series data to a text file.
 
 # Arguments
-- `x::TS`: time series object to write to a file
+- `x::ts`: time series object to write to a file
 - `file::String`: filepath to which object shall be written
 Optional args:
 - `dlm::Char=','`: delimiter used to separate columns
@@ -66,7 +66,7 @@ Optional args:
     tswrite(X, "data.csv")
 
 """
-function tswrite(x::TS, file::String; dlm::Char=',', header::Bool=true, eol::Char='\n')::Nothing
+function tswrite(x::ts, file::String; dlm::Char=',', header::Bool=true, eol::Char='\n')::Nothing
     outfile = open(file, "w")
     if header
         write(outfile, "Index$(dlm)$(join(x.fields, dlm))$(eol)")

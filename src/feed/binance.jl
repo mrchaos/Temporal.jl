@@ -48,7 +48,7 @@ function local_st2utc_dt(st::String;
                         timezone::String="Asia/Seoul")::DateTime
     zdt= ZonedDateTime(
             DateTime(st,dateformat"y-m-d H:M:S"),
-            TimeZones.TimeZone("$(timezone)")
+            TimeZone("$(timezone)")
           )
     dt = DateTime(zdt,Dates.UTC)
 end
@@ -60,9 +60,9 @@ function utc_st2local_dt(st::String;
                         timezone::String="Asia/Seoul")::DateTime
     zdt= ZonedDateTime(
             DateTime(st,dateformat"y-m-d H:M:S"),
-            TimeZones.TimeZone("UTC")
+            TimeZone("UTC")
           )
-    dt = DateTime(astimezone(zdt,TimeZones.TimeZone(timezone)))
+    dt = DateTime(astimezone(zdt,TimeZone(timezone)))
 end
 
 """ 
@@ -76,7 +76,7 @@ function utc_ts2local_dt(ts::Int64;
             tz"UTC"
           )
     DateTime(
-      astimezone(zdt, TimeZones.TimeZone("$(timezone)")))
+      astimezone(zdt, TimeZone("$(timezone)")))
 end
 
 """

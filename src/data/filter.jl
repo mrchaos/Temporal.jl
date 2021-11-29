@@ -29,7 +29,7 @@ end
 """
 Subset the columns of a time series matching a single pattern
 """
-function subset(X::TS, pattern::String)
+function subset(X::ts, pattern::String)
     keepcols = falses(size(X,2))
     for (j, field) in enumerate(X.fields)
         if occursin(pattern, String(field))
@@ -42,7 +42,7 @@ end
 """
 Subset the columns of a time series matching a series of patterns
 """
-function subset(X::TS, patterns::Vector{String})
+function subset(X::ts, patterns::Vector{String})
     keepcols = trues(size(X,2))
     for pattern in patterns
         for (j, field) in enumerate(X.fields)
@@ -100,7 +100,7 @@ function dropnan(x::TS{V,T}; dim::Int=1, fun::Function=any) where {V,T}
     end
 end
 
-function dropnan!(x::TS; dim::Int=1, fun::Function=any)::Nothing
+function dropnan!(x::ts; dim::Int=1, fun::Function=any)::Nothing
     x = dropnan(x, dim=dim, fun=fun)
     return nothing
 end
@@ -192,7 +192,7 @@ end
 """
 Replace missing (NaN) values from a TS object with filled values.
 """
-function fillnan!(x::TS{V,T}, method::Symbol=:ffill)::Nothing where {V,T}
+function fillnan!(x::TS{V,T}; method::Symbol=:ffill)::Nothing where {V,T}
     c = nancols(x.values)
     if !any(c)
         return x

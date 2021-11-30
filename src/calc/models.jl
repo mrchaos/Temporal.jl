@@ -53,7 +53,7 @@ function acf(x::Vector{T}; maxlag::Int=15, lags::AbstractArray{Int,1}=0:maxlag):
     return map((n) -> corlag(x, n), lags)
 end
 
-function acf(x::Matrix{T}; maxlag::Int=15; lags::AbstractVector{Int}=0:maxlag)::Matrix{Float64} where {T<:Number}
+function acf(x::Matrix{T}; maxlag::Int=15, lags::AbstractVector{Int}=0:maxlag)::Matrix{Float64} where {T<:Number}
     k = size(x,2)
     out = zeros(Float64, (length(lags), k))
     @inbounds for j in 1:k

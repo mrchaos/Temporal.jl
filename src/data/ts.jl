@@ -49,7 +49,7 @@ mutable struct TS{V<:VALTYPE,T<:IDXTYPE}
 end
 
 # alias
-const ts = TS{V<:VALTYPE,T<:IDXTYPE}
+const ts = TS
 
 # basic utilities
 collect(x::ts) = x

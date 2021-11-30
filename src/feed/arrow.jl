@@ -2,7 +2,7 @@ import DataFrames
 import Arrow
 
 """
-arrow_read(file::String;index_column_name::String="")::ts
+arrow_read(file::String;index_column_name::String="")::TS
 
 Read contents from a arrow file into a TS object.
 
@@ -16,7 +16,7 @@ Optional args:
     X = arrow_read("data.arrow")
 
 """
-function arrow_read(file::String;index_column_name::String="")::ts
+function arrow_read(file::String;index_column_name::String="")::TS
     df = DataFrames.DataFrame(Arrow.Table(file))
     if index_column_name==""
         index_column_name = "Index"
@@ -31,12 +31,12 @@ end
 
 
 """
-    arrow_write(X::ts,file::String)::Nothing
+    arrow_write(X::TS,file::String)::Nothing
 
 Write time series data to a arrow file.
 
 # Arguments
-- `x::ts`: time series object to write to a file
+- `x::TS`: time series object to write to a file
 - `file::String`: filepath to which object shall be written
 
 # Example

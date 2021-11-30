@@ -1,15 +1,15 @@
 # Find columns in a `TS` object corresponding to the given indexing indicator
-findcols(c::C, x::ts) where {C<:Symbol} = x.fields .== c
-findcols(c::C, x::ts) where {C<:AbstractVector{<:Symbol}} = vcat([findall(c .== x.fields) for c in c]...)
-findcols(c::C, x::ts) where {C<:Int} = [c]
-findcols(c::C, x::ts) where {C<:AbstractVector{<:Integer}} = c
+findcols(c::C, x::TS) where {C<:Symbol} = x.fields .== c
+findcols(c::C, x::TS) where {C<:AbstractVector{<:Symbol}} = vcat([findall(c .== x.fields) for c in c]...)
+findcols(c::C, x::TS) where {C<:Int} = [c]
+findcols(c::C, x::TS) where {C<:AbstractVector{<:Integer}} = c
 
 # Find rows in a `TS` object corresponding to the given indexing indicator
-findrows(t::T, x::ts) where {T<:AbstractVector{<:TimeType}} = map(ti->ti in t, x.index)
-findrows(t::T, x::ts) where {T<:TimeType} = x.index .== t
-findrows(r::R, x::ts) where {R<:Int} = [r]
-findrows(r::R, x::ts) where {R<:AbstractVector{<:Integer}} = r
-findrows(s::S, x::ts) where {S<:AbstractString} = Temporal.dtidx(s, x.index)
+findrows(t::T, x::TS) where {T<:AbstractVector{<:TimeType}} = map(ti->ti in t, x.index)
+findrows(t::T, x::TS) where {T<:TimeType} = x.index .== t
+findrows(r::R, x::TS) where {R<:Int} = [r]
+findrows(r::R, x::TS) where {R<:AbstractVector{<:Integer}} = r
+findrows(s::S, x::TS) where {S<:AbstractString} = Temporal.dtidx(s, x.index)
 
 # Find the alphanumeric characters be able to generate sanitized column names (`fields`)
 isalphanum(s::String, allow_underscores::Bool=false) = [isletter(c) || isnumeric(c) || (allow_underscores && c=='_') for c in s]
@@ -18,7 +18,7 @@ findalphanum(s::String, allow_underscores::Bool=false)::Vector{Int} = findall(is
 # Change a String or Symbol to an alphanumeric-only version
 namefix(s::AbstractString)::AbstractString = s[findalphanum(s)]
 namefix(s::Symbol)::Symbol = Symbol(namefix(string(s)))
-namefix!(x::ts)::Nothing = x.fields = namefix.(x.fields)
+namefix!(x::TS)::Nothing = x.fields = namefix.(x.fields)
 
 # Generate automatic column names following the Excel spreadsheet naming convention (A,B,C,..,X,Y,Z,AA,AB,AC,...)
 function autocol(col::Int)

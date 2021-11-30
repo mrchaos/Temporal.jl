@@ -1,43 +1,43 @@
 # utilities for altering existing TS objects
 
 # in place
-function rename!(t::ts, args::Pair{Symbol, Symbol}...)
+function rename!(ts::TS, args::Pair{Symbol, Symbol}...)
     d = Dict{Symbol, Symbol}(args...)
     flag = false
-    for (i, field) in enumerate(t.fields)
+    for (i, field) in enumerate(ts.fields)
         if field in keys(d)
-            t.fields[i] = d[field]
+            ts.fields[i] = d[field]
             flag = true
         end
     end
 end
 
-function rename!(f::Base.Callable, t::ts, colnametyp::Type{Symbol} = Symbol)
-    for (i, field) in enumerate(t.fields)
-        t.fields[i] = f(field)
+function rename!(f::Base.Callable, ts::TS, colnametyp::Type{Symbol} = Symbol)
+    for (i, field) in enumerate(ts.fields)
+        ts.fields[i] = f(field)
     end
 end
 
-function rename!(f::Base.Callable, t::ts, colnametyp::Type{String})
+function rename!(f::Base.Callable, ts::TS, colnametyp::Type{String})
     f = Symbol ∘ f ∘ string
-    rename!(f, t)
+    rename!(f, ts)
 end
 
 # not in place
-function rename(t::ts, args::Pair{Symbol, Symbol}...)
-    ts2 = copy(t)
+function rename(ts::TS, args::Pair{Symbol, Symbol}...)
+    ts2 = copy(ts)
     rename!(ts2, args...)
     ts2
 end
 
-function rename(f::Base.Callable, t::ts, colnametyp::Type{Symbol} = Symbol)
-    ts2 = copy(t)
+function rename(f::Base.Callable, ts::TS, colnametyp::Type{Symbol} = Symbol)
+    ts2 = copy(ts)
     rename!(f, ts2, colnametyp)
     ts2
 end
 
-function rename(f::Base.Callable, t::ts, colnametyp::Type{String})
-    ts2 = copy(t)
+function rename(f::Base.Callable, ts::TS, colnametyp::Type{String})
+    ts2 = copy(ts)
     rename!(f, ts2, colnametyp)
     ts2
 end

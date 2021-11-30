@@ -41,7 +41,7 @@ function get_xticks(t::Vector{T};
     return xticks_idx, xticks_lab
 end
 
-@recipe function f(X::ts)
+@recipe function f(X::TS)
     #x = 1:size(X,1)
     xticks --> get_xticks(X.index)
     label --> tslab(X.fields)

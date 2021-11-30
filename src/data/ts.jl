@@ -52,18 +52,18 @@ end
 const ts = TS
 
 # basic utilities
-collect(x::ts) = x
-copy(x::ts) = TS(copy(x.values), copy(x.index), copy(x.fields))
-eltype(x::ts) = eltype(x.values)
-first(x::ts) = x[1]
-isempty(x::ts) = (isempty(x.index) && isempty(x.values))
-iterate(x::ts) = size(x,1) == 0 ? nothing : (x.index[1], x.values[1,:]), 2
-iterate(x::ts, i::Int) = i == lastindex(x, 1) + 1 ? nothing : ((x.index[i], x.values[i,:]), i+1)
-last(x::ts) = x[end]
-lastindex(x::ts) = lastindex(x.values)
-lastindex(x::ts, d) = lastindex(x.values, d)
-length(x::ts) = prod(size(x))::Int
-ndims(::ts) = 2
+collect(x::TS) = x
+copy(x::TS) = TS(copy(x.values), copy(x.index), copy(x.fields))
+eltype(x::TS) = eltype(x.values)
+first(x::TS) = x[1]
+isempty(x::TS) = (isempty(x.index) && isempty(x.values))
+iterate(x::TS) = size(x,1) == 0 ? nothing : (x.index[1], x.values[1,:]), 2
+iterate(x::TS, i::Int) = i == lastindex(x, 1) + 1 ? nothing : ((x.index[i], x.values[i,:]), i+1)
+last(x::TS) = x[end]
+lastindex(x::TS) = lastindex(x.values)
+lastindex(x::TS, d) = lastindex(x.values, d)
+length(x::TS) = prod(size(x))::Int
+ndims(::TS) = 2
 ndims(::Type{TS{V,T}}) where {V<:VALTYPE,T<:IDXTYPE} = 2
-size(x::ts) = size(x.values)
-size(x::ts, dim::Int) = size(x.values, dim)
+size(x::TS) = size(x.values)
+size(x::TS, dim::Int) = size(x.values, dim)

@@ -12,7 +12,7 @@ close_field = :Settle
 
 # define indicator parameters
 ind_fun = Indicators.mama
-ind_vals(x::ts) = hl2(x)
+ind_vals(x::TS) = hl2(x)
 ind_args = (:fastlimit, 0.5,
             :slowlimit, 0.05)
 ind_args_rng = (:fastlimit, 0.01:0.01:0.99,

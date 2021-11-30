@@ -11,7 +11,7 @@ str_width(::Missing) = 7
 
 _round(x, n=4) = ismissing(x) ? missing : round(x, digits=n)
 
-function getshowrows(io::IO, x::TS)
+function getshowrows(io::IO, x::ts)
     nrow = size(x,1)
     display_rows, _ = displaysize(io)
     display_rows -= 3
@@ -43,7 +43,7 @@ end
 hasnegs(x::Vector)::Bool = eltype(x)<:Number ? any(x.<zero(eltype(x))) : false
 hasnegs(X::Matrix)::Vector{Bool} = [hasnegs(X[:,j]) for j in 1:size(X,2)]
 
-function show(io::IO, X::TS, padding::Int=PADDING, digits::Int=DECIMALS)::Nothing
+function show(io::IO, X::ts, padding::Int=PADDING, digits::Int=DECIMALS)::Nothing
     # print summary of data structure
     if (isempty(X))
         print(io, "Empty $(typeof(X))\n")

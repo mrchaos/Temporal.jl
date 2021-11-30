@@ -31,10 +31,10 @@ TS(v::V) where {V<:VALARR} = TS(collect(v), autoidx(size(v,1)), autocol(1:size(v
 TS() = TS(zeros((0,0)), Date[], Symbol[])
 
 # copy constructor
-TS(X::TS) = copy(X)
+TS(X::ts) = copy(X)
 
 # named tuple constructor
-function TS(named_tuple::NamedTuple, index_element::Int=0)::TS
+function TS(named_tuple::NamedTuple, index_element::Int=0)::ts
     function find_index_col(fields)::Int
         regex = r"date|time|index"i
         @inbounds for (j, field) in enumerate(fields)

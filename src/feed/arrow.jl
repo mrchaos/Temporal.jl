@@ -45,7 +45,7 @@ Write time series data to a arrow file.
     arrow_write(X, "data.arrow")
 
 """
-function arrow_write(X::Type{TS},file::String)::Nothing
+function arrow_write(X::TS,file::String)::Nothing
     df = DataFrames.DataFrame(X.values,X.fields)
     DataFrames.insertcols!(df,1,:Index=>X.index)
     Arrow.write(file,df)
